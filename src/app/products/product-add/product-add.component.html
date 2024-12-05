@@ -1,0 +1,67 @@
+<form (ngSubmit)="onCreateProduct()" #productForm="ngForm" class="p-4 bg-light rounded shadow-sm">
+  <div class="mb-3">
+    <label for="name" class="form-label">Név:</label>
+    <input
+      type="text"
+      id="name"
+      class="form-control"
+      required
+      [(ngModel)]="currentProducts.name"
+      name="name"
+      #name="ngModel"
+    />
+    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger small mt-1">
+      <div *ngIf="name.errors?.['required']">Név megadása kötelező.</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="url" class="form-label">URL:</label>
+    <input
+      type="text"
+      id="url"
+      class="form-control"
+      required
+      [(ngModel)]="currentProducts.url"
+      name="url"
+      #url="ngModel"
+    />
+    <div *ngIf="url.invalid && (url.dirty || url.touched)" class="text-danger small mt-1">
+      <div *ngIf="url.errors?.['required']">URL megadása kötelező.</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="amount" class="form-label">Mennyiség:</label>
+    <input
+      type="number"
+      id="amount"
+      class="form-control"
+      required
+      [(ngModel)]="currentProducts.amount"
+      name="amount"
+      #amount="ngModel"
+    />
+    <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="text-danger small mt-1">
+      <div *ngIf="amount.errors?.['required']">Mennyiség megadása kötelező.</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="price" class="form-label">Ár:</label>
+    <input
+      type="number"
+      id="price"
+      class="form-control"
+      required
+      [(ngModel)]="currentProducts.price"
+      name="price"
+      #price="ngModel"
+    />
+    <div *ngIf="price.invalid && (price.dirty || price.touched)" class="text-danger small mt-1">
+      <div *ngIf="price.errors?.['required']">Ár megadása kötelező.</div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">Termék hozzáadása</button>
+</form>

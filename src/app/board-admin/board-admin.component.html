@@ -1,0 +1,59 @@
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Sr No</th>
+                <th>ID</th>
+                <th>Név</th>
+                <th>Jelszó</th>
+                <th>Kor</th>
+                <th>Email</th>
+                <th>Műveletek</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users; let i = index" [class.active]="i == currentIndex">
+                <td>{{i+1}}</td>
+                <td>
+                  <input type="text" class="form-control" id="id" [(ngModel)]="user.id" name="id{{i}}" #id="ngModel" required />
+                  <div *ngIf="id.invalid && (id.dirty || id.touched)" class="invalid-feedback">ID kötelező.</div>
+                </td>
+                <td>
+                  <input type="text" class="form-control" id="username" [(ngModel)]="user.username" name="username{{i}}" #username="ngModel" required />
+                  <div *ngIf="username.invalid && (username.dirty || username.touched)" class="invalid-feedback">Felhasználónév kötelező.</div>
+                </td>
+                <td>
+                  <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password{{i}}" #password="ngModel" required minlength="6" />
+                  <div *ngIf="password.invalid && (password.dirty || password.touched)" class="invalid-feedback">
+                    Jelszó kötelező, és legalább 6 karakter hosszúnak kell lennie.
+                  </div>
+                </td>
+                <td>
+                  <input type="number" class="form-control" id="age" [(ngModel)]="user.ageInYears" name="ageInYears{{i}}" #age="ngModel" required min="0" />
+                  <div *ngIf="age.invalid && (age.dirty || age.touched)" class="invalid-feedback">Kor kötelező és pozitív számnak kell lennie.</div>
+                </td>
+                <td>
+                  <input type="text" class="form-control" id="email" [(ngModel)]="user.email" name="email{{i}}" #email="ngModel" required />
+                  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback">Érvényes email-cím megadása kötelező.</div>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-danger" (click)="onDelete(user.id)">Töröl</button>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-primary" (click)="updateCurrentUser(user.id, user)">Frissítés</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="m-3">
+            <button class="btn btn-sm btn-danger" (click)="removeAllusers()">Minden töröl</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

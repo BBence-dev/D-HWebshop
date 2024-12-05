@@ -1,0 +1,95 @@
+<section class="py-5">
+    <div class="container px-5">
+      <h1 class="fw-bolder fs-5 mb-4">Céges Blog</h1>
+      <div class="card border-0 shadow rounded-3 overflow-hidden">
+        <div class="row gx-0">
+          <div class="col-lg-6">
+            <img 
+              class="img-fluid rounded mb-5 mb-lg-0" 
+              [src]="currentProduct.url" 
+              alt="{{currentProduct.name}}" 
+              title="{{currentProduct.name}}" />
+          </div>
+          <div class="col-lg-6 d-flex align-items-center">
+            <div class="p-4 p-md-5">
+              <div class="badge bg-primary bg-gradient rounded-pill mb-2">
+                {{currentProduct.name}}
+              </div>
+              <h2 class="h2 fw-bolder">E-folyadékok előnyei</h2>
+              <p>
+                Az e-liquid, vagyis az elektromos cigaretta folyadék, számos előnnyel jár a hagyományos dohányzáshoz képest.
+                Nézzük meg, milyen előnyökkel jár az e-liquid használata.
+              </p>
+              <a 
+                class="stretched-link text-decoration-none fw-bold" 
+                href="#!"
+              >
+                Olvass tovább <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5">
+        <h5 class="fw-bolder">
+          <a 
+            [routerLink]="'/products/' + currentProduct.id" 
+            class="text-decoration-none text-primary"
+          >
+            {{currentProduct.name}}
+          </a>
+        </h5>
+        <h6 class="text-muted">Ár: <span class="text-dark">{{currentProduct.price}} Ft</span></h6>
+  
+        <form #productForm="ngForm">
+          Mennyiség:
+          <input
+            type="number"
+            [(ngModel)]="currentProduct.amount"
+            name="amount"
+            class="form-control w-50"
+            required
+            #amount="ngModel"
+            min="0"  [max]="getMaxAmount(currentProduct)" />
+          <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="text-danger">
+            <div *ngIf="amount.errors?.['required']">A mennyiség megadása kötelező.</div>
+            <div *ngIf="amount.errors?.['min']">A mennyiség nem lehet kisebb, mint 0.</div>
+            <div *ngIf="amount.errors?.['max']">
+              A mennyiség nem lehet nagyobb, mint a raktáron lévő készlet ({{ currentProduct.availableAmount }}).
+            </div>
+          </div>
+          
+          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center">
+              <button
+                class="btn btn-outline-dark mt-auto"
+                (click)="onAddItem(currentProduct)"
+                [disabled]="productForm.invalid">
+                Kosárhoz
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="mt-5">
+      <div class="mb-3">
+        <label for="emailInput" class="form-label">E-mail cím</label>
+        <input 
+          type="email" 
+          class="form-control" 
+          id="emailInput" 
+          placeholder="name@example.com">
+      </div>
+      <div class="mb-3">
+        <label for="messageTextarea" class="form-label">Üzenet</label>
+        <textarea 
+          class="form-control" 
+          id="messageTextarea" 
+          rows="3" 
+          placeholder="Írja ide az üzenetét">
+        </textarea>
+      </div>
+    </div>
+  </section>
+  

@@ -1,0 +1,94 @@
+<div class="container my-5" *ngIf="currentUser; else loggedOut">
+  <div class="row mb-3">
+    <div class="col-12 text-end">
+      <button class="btn btn-sm btn-primary" (click)="isListView = !isListView">
+        {{ isListView ? 'Rendelés mutatása' : 'Rendelés elrejtése' }}
+      </button>
+    </div>
+  </div>
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm p-4">
+        <h2 class="card-title mb-3">Űrlap 1</h2>
+        <form>
+          <div class="form-group mb-3">
+            <label for="inputName1" class="form-label">Név: {{ currentUser.username }}</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              [(ngModel)]="currentUser.username"
+              name="title"
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="inputEmail1" class="form-label">Email cím: {{ currentUser.email }}</label>
+            <input
+              type="email"
+              class="form-control"
+              id="description"
+              [(ngModel)]="currentUser.email"
+              name="description"
+            />
+          </div>
+          <div class="mb-3">
+            <strong>Szerepek:</strong>
+            <ul class="list-unstyled mt-2">
+              <li *ngFor="let role of currentUser.roles" class="badge bg-secondary me-1">
+                {{ role }}
+              </li>
+            </ul>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-danger" (click)="deleteUser()">Töröl</button>
+            <button type="button" class="btn btn-success" (click)="updateUser()">Frissítés</button>
+          </div>
+          <p class="text-success mt-2">{{ message }}</p>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-6" *ngIf="!isListView">
+      <div class="table-responsive card shadow-sm p-3">
+        <h2 class="card-title mb-3">Rendelések</h2>
+        <table class="table table-bordered table-striped align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Sr No</th>
+              <th>ID</th>
+              <th>Név</th>
+              <th>Fizetés</th>
+              <th>Összeg</th>
+              <th>Ár</th>
+              <th>Fizetve</th>
+              <th>Város</th>
+              <th>Zip</th>
+              <th>Állam</th>
+              <th>Státusz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Order of Orders; let i = index" [class.table-active]="i === currentIndex">
+              <td>{{ i + 1 }}</td>
+              <td>{{ Order.id }}</td>
+              <td>{{ Order.name }}</td>
+              <td>{{ Order.payment }}</td>
+              <td>{{ Order.amount }}</td>
+              <td>{{ Order.price }}</td>
+              <td>{{ Order.payed }}</td>
+              <td>{{ Order.city }}</td>
+              <td>{{ Order.zip }}</td>
+              <td>{{ Order.state }}</td>
+              <td>{{ Order.status }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loggedOut>
+  <div class="alert alert-warning text-center my-5">
+    Kérjük, jelentkezzen be.
+  </div>
+</ng-template>

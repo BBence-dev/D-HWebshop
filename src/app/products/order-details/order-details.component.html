@@ -1,0 +1,372 @@
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <form #orderForm="ngForm" (ngSubmit)="onCreateOrder()">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead class="table-dark">
+                <tr>
+                  <th>Név</th>
+                  <th>Fizetés</th>
+                  <th>Összeg</th>
+                  <th>Ár</th>
+                  <th>Fizetve</th>
+                  <th>Város</th>
+                  <th>Zip</th>
+                  <th>Állam</th>
+                  <th>Szállítás</th>
+                  <th>Szállítva</th>
+                  <th>Státusz</th>
+                  <th>Műveletek</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.name"
+                      name="name"
+                      #name="ngModel"
+                      required
+                      [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
+                    />
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="invalid-feedback">
+                      Név kötelező.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.payment"
+                      name="payment"
+                      #payment="ngModel"
+                      required
+                      [class.is-invalid]="payment.invalid && (payment.dirty || payment.touched)"
+                    />
+                    <div *ngIf="payment.invalid && (payment.dirty || payment.touched)" class="invalid-feedback">
+                      Fizetés kötelező.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.amount"
+                      name="amount"
+                      #amount="ngModel"
+                      required
+                      min="0"
+                      [class.is-invalid]="amount.invalid && (amount.dirty || amount.touched)"
+                    />
+                    <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="invalid-feedback">
+                      Összeg kötelező, és pozitív számnak kell lennie.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.price"
+                      name="price"
+                      #price="ngModel"
+                      required
+                      min="0"
+                      [class.is-invalid]="price.invalid && (price.dirty || price.touched)"
+                    />
+                    <div *ngIf="price.invalid && (price.dirty || price.touched)" class="invalid-feedback">
+                      Ár kötelező, és pozitív számnak kell lennie.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.payed"
+                      name="payed"
+                      #payed="ngModel"
+                      required
+                      [class.is-invalid]="payed.invalid && (payed.dirty || payed.touched)"
+                    />
+                    <div *ngIf="payed.invalid && (payed.dirty || payed.touched)" class="invalid-feedback">
+                      Fizetés kötelező.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.city"
+                      name="city"
+                      #city="ngModel"
+                      required
+                      [class.is-invalid]="city.invalid && (city.dirty || city.touched)"
+                    />
+                    <div *ngIf="city.invalid && (city.dirty || city.touched)" class="invalid-feedback">
+                      Város kötelező.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.zip"
+                      name="zip"
+                      #zip="ngModel"
+                      required
+                      min="0"
+                      [class.is-invalid]="zip.invalid && (zip.dirty || zip.touched)"
+                    />
+                    <div *ngIf="zip.invalid && (zip.dirty || zip.touched)" class="invalid-feedback">
+                      Zip kód kötelező, és pozitív számnak kell lennie.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.state"
+                      name="state"
+                      #state="ngModel"
+                      required
+                      [class.is-invalid]="state.invalid && (state.dirty || state.touched)"
+                    />
+                    <div *ngIf="state.invalid && (state.dirty || state.touched)" class="invalid-feedback">
+                      Állam kötelező.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.delivery"
+                      name="delivery"
+                      #delivery="ngModel"
+                      required
+                      [class.is-invalid]="delivery.invalid && (delivery.dirty || delivery.touched)"
+                    />
+                    <div *ngIf="delivery.invalid && (delivery.dirty || delivery.touched)" class="invalid-feedback">
+                      Szállítás kötelező.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="date"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.ddelivery"
+                      name="ddelivery"
+                      #ddelivery="ngModel"
+                      required
+                      [class.is-invalid]="ddelivery.invalid && (ddelivery.dirty || ddelivery.touched)"
+                    />
+                    <div *ngIf="ddelivery.invalid && (ddelivery.dirty || ddelivery.touched)" class="invalid-feedback">
+                      Szállítás dátuma kötelező.
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="currentOrders.status"
+                      name="status"
+                      #status="ngModel"
+                      required
+                      [class.is-invalid]="status.invalid && (status.dirty || status.touched)"
+                    />
+                    <div *ngIf="status.invalid && (status.dirty || status.touched)" class="invalid-feedback">
+                      Státusz kötelező.
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-primary" [disabled]="orderForm.invalid">
+                      Felvitel
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="table-responsive mt-4">
+          <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>Sr No</th>
+                <th>Név</th>
+                <th>Fizetés</th>
+                <th>Összeg</th>
+                <th>Ár</th>
+                <th>Fizetve</th>
+                <th>Város</th>
+                <th>Zip</th>
+                <th>Állam</th>
+                <th>Szállitás</th>
+                <th>Szállitva</th>
+                <th>Státusz</th>
+                <th>Műveletek</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let Order of Orders; let i = index" [class.table-primary]="i == currentIndex">
+                <td>{{ i + 1 }}</td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="Order.name"
+                    name="name-{{ i }}"
+                    #name="ngModel"
+                    required
+                  />
+                  <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger small">
+                    Név megadása kötelező.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="Order.payment"
+                    name="payment-{{ i }}"
+                    #payment="ngModel"
+                    required
+                  />
+                  <div *ngIf="payment.invalid && (payment.dirty || payment.touched)" class="text-danger small">
+                    Fizetés megadása kötelező.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="Order.amount"
+                    name="amount-{{ i }}"
+                    #amount="ngModel"
+                    required
+                    min="0"
+                  />
+                  <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="text-danger small">
+                    Mennyiség megadása kötelező, és pozitív számnak kell lennie.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="Order.price"
+                    name="price-{{ i }}"
+                    #price="ngModel"
+                    required
+                    min="0"
+                  />
+                  <div *ngIf="price.invalid && (price.dirty || price.touched)" class="text-danger small">
+                    Ár megadása kötelező, és pozitív számnak kell lennie.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="Order.payed"
+                    name="payed-{{ i }}"
+                    #payed="ngModel"
+                    required
+                  />
+                  <div *ngIf="payed.invalid && (payed.dirty || payed.touched)" class="text-danger small">
+                    Fizetési állapot megadása kötelező.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="Order.city"
+                    name="city-{{ i }}"
+                    #city="ngModel"
+                    required
+                  />
+                  <div *ngIf="city.invalid && (city.dirty || city.touched)" class="text-danger small">
+                    Város megadása kötelező.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="Order.zip"
+                    name="zip-{{ i }}"
+                    #zip="ngModel"
+                    required
+                    min="0"
+                  />
+                  <div *ngIf="zip.invalid && (zip.dirty || zip.touched)" class="text-danger small">
+                    Zip kód megadása kötelező, és pozitív számnak kell lennie.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="Order.state"
+                    name="state-{{ i }}"
+                    #state="ngModel"
+                    required
+                  />
+                  <div *ngIf="state.invalid && (state.dirty || state.touched)" class="text-danger small">
+                    Állam megadása kötelező.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="Order.delivery"
+                    name="delivery-{{ i }}"
+                    #delivery="ngModel"
+                    required
+                  />
+                  <div *ngIf="delivery.invalid && (delivery.dirty || delivery.touched)" class="text-danger small">
+                    Szállítási adatok megadása kötelező.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    class="form-control"
+                    [(ngModel)]="Order.ddelivery"
+                    name="ddelivery-{{ i }}"
+                    #ddelivery="ngModel"
+                    required
+                  />
+                  <div *ngIf="ddelivery.invalid && (ddelivery.dirty || ddelivery.touched)" class="text-danger small">
+                    Szállítás dátuma kötelező.
+                  </div>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="Order.status"
+                    name="status-{{ i }}"
+                    #status="ngModel"
+                    required
+                  />
+                  <div *ngIf="status.invalid && (status.dirty || status.touched)" class="text-danger small">
+                    Státusz megadása kötelező.
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-danger" (click)="onDeleteOrder(Order.id)">Töröl</button>
+                  <button class="btn btn-sm btn-primary"(click)="updateOrder(Order.id, Order)">Frissítés</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

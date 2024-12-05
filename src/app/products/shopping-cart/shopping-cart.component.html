@@ -1,0 +1,323 @@
+<div class="row">
+  <div class="col-12">
+    <form 
+      class="row g-3 needs-validation" 
+      *ngIf="!isSuccessful" 
+      novalidate 
+      (ngSubmit)="f.form.valid && onCreateOrder()" 
+      #f="ngForm"
+    >
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button 
+              class="accordion-button" 
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#collapseOne" 
+              aria-expanded="true" 
+              aria-controls="collapseOne"
+            >
+              Termékek
+            </button>
+          </h2>
+          <div 
+            id="collapseOne" 
+            class="accordion-collapse collapse show" 
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Név</th>
+                    <th>Ár</th>
+                    <th>Mennyiség</th>
+                    <th>Művelet</th>
+                    <th>Összeg</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let cart of carts; let i = index">
+                    <td>{{ cart.id }}</td>
+                    <td>{{ cart.name }}</td>
+                    <td>{{ cart.price | currency }}</td>
+                    <td>
+                      <input 
+                        type="number" 
+                        [(ngModel)]="cart.amount" 
+                        name="amount{{i}}" 
+                        class="form-control w-50" 
+                        required 
+                        #amount="ngModel" 
+                        min="0" 
+                        [max]="getMaxAmount(cart)"
+                      />
+                      <div 
+                        *ngIf="amount.invalid && (amount.dirty || amount.touched)" 
+                        class="text-danger"
+                      >
+                        <div *ngIf="amount.errors?.['required']">
+                          A mennyiség megadása kötelező.
+                        </div>
+                        <div *ngIf="amount.errors?.['min']">
+                          A mennyiség nem lehet kisebb, mint 0.
+                        </div>
+                        <div *ngIf="amount.errors?.['max']">
+                          A mennyiség nem lehet nagyobb, mint a raktáron lévő készlet ({{ cart.availableAmount }}).
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <button 
+                        class="btn btn-danger" 
+                        type="button" 
+                        (click)="removeProduct(cart)"
+                      >
+                        Töröl
+                      </button>
+                    </td>
+                    <td>{{ (cart.price * cart.amount) | number : '1.2-2' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" *ngIf="isLoggedIn">
+          <h2 class="accordion-header">
+            <button 
+              class="accordion-button collapsed" 
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#collapseTwo" 
+              aria-expanded="false" 
+              aria-controls="collapseTwo"
+            >
+              Szállítási adatok
+            </button>
+          </h2>
+          <div 
+            id="collapseTwo" 
+            class="accordion-collapse collapse" 
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body row g-3">
+              <div class="col-md-4">
+                <label for="city" class="form-label">Város</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="city" 
+                  required 
+                  [(ngModel)]="currentProducts.city" 
+                  name="city" 
+                  #city="ngModel"
+                  [ngClass]="{ 'is-invalid': f.submitted && city.errors }"
+                />
+                <div class="invalid-feedback" *ngIf="f.submitted && city.errors">
+                  Város kitöltése kötelező.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="state" class="form-label">Állam</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="state" 
+                  required 
+                  [(ngModel)]="currentProducts.state" 
+                  name="state" 
+                  #state="ngModel"
+                  [ngClass]="{ 'is-invalid': f.submitted && state.errors }"
+                />
+                <div class="invalid-feedback" *ngIf="f.submitted && state.errors">
+                  Állam kitöltése kötelező.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="zip" class="form-label">Irányítószám</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="zip" 
+                  required 
+                  [(ngModel)]="currentProducts.zip" 
+                  name="zip" 
+                  #zip="ngModel"
+                  [ngClass]="{ 'is-invalid': f.submitted && zip.errors }"
+                />
+                <div class="invalid-feedback" *ngIf="f.submitted && zip.errors">
+                  Irányítószám kitöltése kötelező.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" *ngIf="isLoggedIn">
+          <h2 class="accordion-header">
+            <button 
+              class="accordion-button collapsed" 
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#collapseThree" 
+              aria-expanded="false" 
+              aria-controls="collapseThree"
+            >
+              Fizetés
+            </button>
+          </h2>
+          <div 
+            id="collapseThree" 
+            class="accordion-collapse collapse" 
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3 class="fw-bold">{{ total | currency }}</h3>
+                <button 
+                  type="submit" 
+                  class="btn btn-primary"
+                >
+                  Fizet
+                </button>
+              </div>
+              <div class="mt-3">
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    name="paymentMethod" 
+                    id="cashOnDelivery" 
+                    value="Utánvétel" 
+                    required 
+                    [(ngModel)]="currentProducts.payment"
+                  />
+                  <label class="form-check-label" for="cashOnDelivery">
+                    Utánvétel
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    name="paymentMethod" 
+                    id="creditCard" 
+                    value="Kártya" 
+                    required 
+                    [(ngModel)]="currentProducts.payment"
+                  />
+                  <label class="form-check-label" for="creditCard">
+                    Kártya
+                  </label>
+                </div>
+              </div>
+              <div 
+                class="row g-3 mt-3" 
+                *ngIf="currentProducts.payment === 'Kártya'"
+              >
+                <div class="col-md-4">
+                  <label for="cardn" class="form-label">Kártyaszám</label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="cardn" 
+                    required 
+                    [(ngModel)]="currentProducts.cardn" 
+                    name="cardn" 
+                    #cardn="ngModel"
+                    [ngClass]="{ 'is-invalid': f.submitted && cardn.errors }"
+                  />
+                  <div class="invalid-feedback" *ngIf="f.submitted && cardn.errors">
+                    Kártyaszám kitöltése kötelező.
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="expd" class="form-label">Lejárati idő</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="expd" 
+                    required 
+                    [(ngModel)]="currentProducts.expd" 
+                    name="expd" 
+                    #expd="ngModel"
+                    [ngClass]="{ 'is-invalid': f.submitted && expd.errors }"
+                  />
+                  <div class="invalid-feedback" *ngIf="f.submitted && expd.errors">
+                    Lejárati idő kitöltése kötelező.
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="cvv" class="form-label">CVV</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="cvv" 
+                    required 
+                    [(ngModel)]="currentProducts.cvv" 
+                    name="cvv" 
+                    #cvv="ngModel"
+                    [ngClass]="{ 'is-invalid': f.submitted && cvv.errors }"
+                  />
+                  <div class="invalid-feedback" *ngIf="f.submitted && cvv.errors">
+                    CVV kitöltése kötelező.
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <h5 class="fw-bold">Szállítási lehetőség</h5>
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    name="delivery" 
+                    id="postDelivery" 
+                    value="MagyarPosta" 
+                    required 
+                    [(ngModel)]="currentProducts.delivery"
+                  />
+                  <label class="form-check-label" for="postDelivery">
+                    MagyarPosta
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    name="delivery" 
+                    id="foxPost" 
+                    value="FoxPost" 
+                    required 
+                    [(ngModel)]="currentProducts.delivery"
+                  />
+                  <label class="form-check-label" for="foxPost">
+                    FoxPost
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    name="delivery" 
+                    id="glsDelivery" 
+                    value="Gls" 
+                    required 
+                    [(ngModel)]="currentProducts.delivery"
+                  />
+                  <label class="form-check-label" for="glsDelivery">
+                    GLS
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="alert alert-success" *ngIf="isSuccessful">
+      Megrendelése sikeres!
+    </div>
+  </div>
+</div>

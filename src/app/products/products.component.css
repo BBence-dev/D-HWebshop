@@ -1,0 +1,54 @@
+
+header {
+    background: linear-gradient(to right, #343a40, #495057);
+    color: white;
+    text-align: center;
+  }
+  
+  header img {
+    max-height: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+  
+  .card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .card-text {
+    font-size: 1rem;
+  }
+
+  .btn-outline-dark {
+    color: #495057;
+    border-color: #495057;
+  }
+  
+  .btn-outline-dark:hover {
+    background-color: #495057;
+    color: white;
+  }
+  
+  form input[type="number"] {
+    max-width: 100px;
+    text-align: center;
+  }
+  

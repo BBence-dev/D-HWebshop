@@ -1,0 +1,61 @@
+<header class="bg-dark py-5">
+    <div class="container text-center text-white">
+      <h1 class="display-4 fw-bold mb-3">Vásároljon stílusosan</h1>
+      <img src="/assets/termék.jpg" class="img-fluid rounded shadow-lg mb-3" alt="Termék kép">
+      <p class="lead fw-normal text-white-50">Fedezze fel kínálatunkat most!</p>
+    </div>
+  </header>
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row g-4 justify-content-center">
+        <div 
+          class="col-12 col-md-6 col-lg-4 col-xl-3" 
+          *ngFor="let product of products; let i = index" 
+          [class.active]="i === currentIndex">
+          <div class="card h-100 shadow-sm">
+            <img class="card-img-top" src="{{product.url}}" alt="{{product.name}}">
+            <div class="card-body">
+              <h5 class="card-title text-center">
+                <a routerLink="/products/{{product.id}}" class="text-decoration-none text-dark">
+                  {{product.name}}
+                </a>
+              </h5>
+              <p class="card-text text-center text-muted mb-2">Ár: <strong>{{product.price}} Ft</strong></p>
+              <form #productForm="ngForm">
+                <div class="mb-3 text-center">
+                  <label for="amount-{{product.id}}" class="form-label fw-bold">Mennyiség:</label>
+                  <input 
+                    id="amount-{{product.id}}" 
+                    type="number" 
+                    class="form-control w-50 mx-auto" 
+                    [(ngModel)]="product.amount" 
+                    name="amount" 
+                    required
+                    #amount="ngModel" 
+                    min="0" 
+                    [max]="getMaxAmount(product)">
+                  <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="text-danger mt-2">
+                    <div *ngIf="amount.errors?.['required']">A mennyiség megadása kötelező.</div>
+                    <div *ngIf="amount.errors?.['min']">A mennyiség nem lehet kisebb, mint 0.</div>
+                    <div *ngIf="amount.errors?.['max']">
+                      Maximum rendelhető mennyiség: {{product.availableAmount}}.
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button 
+                    type="button" 
+                    class="btn btn-outline-dark w-75" 
+                    (click)="onAddItem(product)" 
+                    [disabled]="productForm.invalid">
+                    Kosárhoz
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

@@ -1,0 +1,88 @@
+<div id="app">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <a href="#" class="navbar-brand">Dohánywebshop</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto" routerLinkActive="active">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/home">Főoldal</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/about">Rólunk</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products">Termékek</a>
+        </li>
+        <li class="nav-item">
+          <form class="d-flex">
+            <button class="btn btn-outline-light" type="submit" routerLink="/cart">
+              <i class="bi bi-basket-fill me-1"></i>
+              Kosár
+              <span class="badge bg-dark text-white ms-1 rounded-pill">{{carts?.length}}</span>
+            </button>
+          </form>
+        </li>
+        <li class="nav-item" *ngIf="showAdminBoard">
+          <a class="nav-link" routerLink="/admin">Admin oldal</a>
+        </li>
+        <li class="nav-item" *ngIf="showModeratorBoard">
+          <a class="nav-link" routerLink="/mod">Moderator oldal</a>
+        </li>
+        <li class="nav-item" *ngIf="showAdminBoard || showModeratorBoard">
+          <a class="nav-link" routerLink="/products-add">Termék felvitel</a>
+        </li>
+        <li class="nav-item" *ngIf="showAdminBoard || showModeratorBoard">
+          <a class="nav-link" routerLink="/order-detail">Rendelés leírás</a>
+        </li>
+      </ul>
+
+      <div class="dropdown ms-auto me-3">
+        <input
+          #searchInput
+          type="text"
+          class="form-control"
+          id="searchInput"
+          (input)="search($event)"
+          placeholder="Keresés"
+          aria-label="Search"
+          autocomplete="off"
+        />
+        <ul
+          class="dropdown-menu w-100"
+          [class.show]="filteredData.length > 0 && searchQuery !== ''"
+        >
+          <li *ngFor="let item of filteredData">
+            <a
+              class="dropdown-item text-primary"
+              (click)="onSelect(item)"
+              routerLink="/products/{{item.id}}"
+            >
+              {{ item.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <ul class="navbar-nav" *ngIf="!isLoggedIn">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/register">Regisztráció</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login">Bejelentkezés</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav" *ngIf="isLoggedIn">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/profile">{{ username }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()" routerLink="/home">Kijelentkezés</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</div>
