@@ -1,0 +1,23 @@
+{
+  "name": "dohanywebshop",
+  "version": "1.0.0",
+  "description": "szakdoga",
+  "main": "app.js",
+  "scripts": {
+    "test": "app.js"
+  },
+  "author": "Butella Bence Kristóf",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-session": "^2.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mariadb": "^3.3.2",
+    "sequelize": "^6.37.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
